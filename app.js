@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { config } = require('dotenv')
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
+
 
 config();
 const app = express();
@@ -18,6 +21,9 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erro ao conectar ao MongoDB'));
 
 app.use(bodyParser.json());
+
+//Middlewares
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(userRoute)
 app.use(projectRoute)
